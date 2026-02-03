@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Customer Module</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f2f2f2;
+}
+
+.container{
+    display:flex;
+    height:100%;
+}
+
+/* Left Form */
+.form-box{
+    width:40%;
+    background:#ddd;
+    padding:15px;
+}
+
+.form-box h2{
+    text-align:center;
+    background:black;
+    color:gold;
+    padding:8px;
+}
+
+.form-box input,
+.form-box select{
+    width:95%;
+    padding:6px;
+    margin:4px 0;
+}
+
+.buttons{
+    text-align:center;
+    margin-top:10px;
+}
+
+.buttons button{
+    padding:8px 14px;
+    margin:4px;
+    background:red;
+    color:black;
+    border:none;
+    cursor:pointer;
+    border-radius: 10%;
+    font-weight: bold;
+    
+}
+.buttons button:hover{
+    background-color:green;
+}
+
+/* Right section */
+.table-box {
+    width: 60%;
+    background-color: #ffffff;  
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    overflow-x: auto;
+
+}
+
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.search input, .search select{
+    padding:5px;
+}
+
+.search button{
+    padding:6px 12px;
+    background:red;
+    color:black;
+    font-weight: bold;
+    border:none;
+
+}
+
+.search button:hover{
+    background-color: green;
+}
+#customerTable{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#customerTable th,
+#customerTable td {
+    border: 1px solid black;
+    padding: 6px;
+}
+
+#customerTable th {
+    background-color: #1e3b8a;
+    color: #fff;
+}
+
+#customerTable tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;background:black;color:gold;padding:10px;">
+ADD STAFF DETAILS
+</h2>
+
+<div class="container">
+
+<div class="form-box">
+    <label> Id_Number</label>
+    <input type="text" id="Id">
+
+    <label> First name</label>
+    <input type="text" id="FirstName">
+
+     <label>Last name</label>
+    <input type="text" id="LastName">
+
+    <label>Father Name</label>
+    <input type="text" id="FatherName">
+
+      <label>Mother  Name</label>
+    <input type="text" id="MotherName">
+
+     <label>Role</label>
+    <select id="Role">
+        <option>Manager</option>
+        <option>Room-Service</option>
+        <option>Receptitionist</option>
+        <option>Cleaning</option>
+        <option>Maintenence</option>
+    </select>
+    
+    <label>Gender</label>
+    <select id="Gender">
+        <option>Male</option>
+        <option>Female</option>
+        <option>other</option>
+    </select>
+
+
+    <label>Mobile</label>
+    <input type="text" id="Mobile">
+
+    <label>Email</label>
+    <input type="email" id="Email">
+
+    <label>Nationality</label>
+    <input type="text" id="Nationality">
+
+    <label>ID Proof</label>
+    <select id="IdProof">
+        <option>citizenship</option>
+        <option>Driving Lisence</option>
+        <option>Passport</option>
+    </select>
+
+    <label>ID-Number</label>
+    <input type="text" id="IdNumber">
+
+    <label>Address</label>
+    <input type="text" id="Address">
+
+    <div class="buttons">
+        <button type="button" class="btn" onclick="add()">Save</button>
+        <button onclick="update()">Update</button>
+        <button onclick="del()">Delete</button>
+        <button onclick="resetForm()">Reset</button>
+    </div>
+</div>
+
+<div class="table-box">
+    <div class="search">
+        <select>
+            <option>Mobile</option>
+            <option>Name</option>
+            <option>ID-Number</option>
+            
+        </select>
+        <input type="text" placeholder="Search">
+        <button> Search</button>
+        <button type="button" onclick="LoadData()">Show All</button>
+    </div>
+   <table id="customerTable">
+                <thead>
+                    <tr>
+                        <th>ID-number</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>FatherName</th>
+                        <th>MotherName</th>
+                        <th>Role</th>
+                        <th>Gender</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Nationality</th>
+                        <th>ID Proof</th>
+                        <th>ID Number</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>
+        </div>
+    
+</div>
+
+</div>
+
+<script>
+    function add(){
+        let data={
+            Id:document.getElementById("Id").value.trim(),
+            FirstName:document.getElementById("FirstName").value.trim(),
+            LastName:document.getElementById("LastName").value.trim(),
+            FatherName:document.getElementById("FatherName").value.trim(),
+            MotherName:document.getElementById("MotherName").value.trim(),
+            Role:document.getElementById("Role").value.trim(),
+            Gender:document.getElementById("Gender").value.trim(),
+            Mobile:document.getElementById("Mobile").value.trim(),
+            Email:document.getElementById("Email").value.trim(),
+            Nationality:document.getElementById("Nationality").value.trim(),
+            IdProof:document.getElementById("IdProof").value.trim(),
+            IdNumber:document.getElementById("IdNumber").value.trim(),
+            Address:document.getElementById("Address").value.trim(),
+
+
+            
+        };
+
+              fetch("/add_staff",{
+            method:"POST",
+            headers:{
+              "Content-Type": "application/json"
+            
+            },
+               body: JSON.stringify(data)
+        })
+            .then(Response => Response.json())
+            
+            .then(data => {
+             alert(data.message);
+                })
+    
+
+            .catch(Error =>{
+                console.error("error",Error);
+                
+            });
+        
+
+        }
+
+            function resetForm(){
+            document.querySelectorAll("input").forEach(input => input.value = "");
+            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
+            }
+    
+
+function LoadData(){
+    fetch("/get_staff")
+    .then(Response=>Response.json())
+    .then(data=>{
+        const  tbody=document.querySelector("#customerTable tbody");
+        tbody.innerHTML="";
+
+        data.forEach(staff => {
+            const row=document.createElement("tr");
+            row.innerHTML=`
+
+            <td>${staff.Id}</td>
+             <td>${staff.FirstName}</td>
+            <td>${staff.LastName}</td>
+             <td>${staff.FatherName}</td>
+            <td>${staff.LastName}</td>
+             <td>${staff.Role}</td>
+                <td>${staff.Gender}</td>
+                 <td>${staff.Mobile}</td>
+                <td>${staff.Email}</td>
+                 <td>${staff.Nationality}</td>
+                  <td>${staff.IdProof}</td>
+                   <td>${staff.IdNumber}</td>
+              <td>${staff.Address}</td>
+
+            
+            
+            `;
+            tbody.appendChild(row);
+
+        })
+
+    })
+      .catch(error => console.error("Error loading staff:", error));
+}
+window.onload = LoadData;
+
+
+
+</script>
+
+
+
+</body>
+</html>

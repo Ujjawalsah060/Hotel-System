@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgotPassword</title>
+    <style>
+
+
+body{
+
+    background: linear-gradient(to right, #dadce1, #2563eb);
+    font-family: Arial, sans-serif;
+    background-image: url("static/image/mainroom.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    height: 100vh;
+
+}
+
+.container{
+    width:350px;
+   margin-top: 20vh;
+    background-color: rgba(211, 174, 94, 0.512);
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+    height: 350px;
+}
+
+.container h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+
+}
+
+button:hover{
+    background:#764ba2;
+    scale: 0.9;
+}
+
+#msg{
+    margin-top:10px;
+    text-align:center;
+    font-size:14px;
+}
+
+.success{ color:green; }
+.error{ color:red; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Reset Password</h2>
+    <form id="forgotForm">
+        <input type="text" id="phone" name="phone" placeholder="Enter Phone Number" required>
+        <input type="password" id="password" name="password" placeholder="New Password" required>
+        <input type="password" id="confirm" placeholder="Confirm Password" required>
+        <button type="submit">Reset</button>
+    </form>
+    <div id="msg"></div>
+</div>
+
+
+<script>
+document.getElementById("forgotForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let phone = document.getElementById("phone").value;
+    let password = document.getElementById("password").value;
+    let confirm = document.getElementById("confirm").value;
+    let msg = document.getElementById("msg");
+
+    if(password !== confirm){
+        msg.innerHTML = "Passwords do not match!";
+        msg.className = "error";
+        return;
+    }
+
+    fetch("/forgot", {
+        method: "POST",
+        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+        body: `phone=${phone}&password=${password}`
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data.includes("success")){
+            msg.innerHTML = data;
+            msg.className = "success";
+        } else {
+            msg.innerHTML = data;
+            msg.className = "error";
+        }
+    })
+    .catch(() => {
+        msg.innerHTML = "Server error!";
+        msg.className = "error";
+    });
+});
+</script>
+
+</body>
+</html>
