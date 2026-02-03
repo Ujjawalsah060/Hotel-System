@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Customer Module</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+
+h2{
+    text-align: center;
+    background: black;
+    color: gold;
+    padding: 10px;
+}
+
+.container {
+   margin-left: 10px;
+   padding: 5px;
+    gap: 20px;          
+    width: 100%;
+    display: flex;
+   
+}
+
+.form-box {
+    background: #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 40%;
+}
+
+.form-box h2 {
+    text-align: center;
+    background: black;
+    color: gold;
+    padding: 8px;
+    margin-top: 0;
+}
+
+.form-box label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form-box input,
+.form-box select {
+    width: 95%;
+    padding: 6px;
+    margin-top: 4px;
+}
+
+/* Buttons */
+.buttons{
+    text-align: center;
+    margin-top: 15px;
+}
+
+.buttons button{
+    padding: 8px 14px;
+    margin: 4px;
+    background: red;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 10%;
+    font-weight: bold;
+}
+
+.buttons button:hover{
+    background-color: green;
+    transform: scale(0.95);
+}
+
+
+
+
+
+.table-box {
+    width: 60%;
+    background-color: #ffffff;  
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    overflow-x: auto;
+}
+
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.search input, .search select {
+    padding: 5px;
+}
+
+.search button {
+    padding: 6px 12px;
+    background: red;
+    color: black;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.search button:hover{
+    background-color: green;
+    transform: scale(0.9);
+}
+
+
+#customerTable{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#customerTable th,
+#customerTable td {
+    border: 1px solid black;
+    padding: 6px;
+}
+
+#customerTable th {
+    background-color: #1e3b8a;
+    color: #fff;
+}
+
+#customerTable tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<h2>ADD CUSTOMER DETAILS</h2>
+
+<div class="container">
+
+
+        <div class="form-box">
+            
+            <label>Customer Name</label>
+            <input type="text" id="name">
+
+            <label>Father Name</label>
+            <input type="text" id="father">
+
+            <label>Mother Name</label>
+            <input type="text" id="mother">
+
+            <label>Gender</label>
+            <select id="gender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+
+            <label>Room No.</label>
+            <select id="RoomNo">
+                <option value="">-- Select Room --</option>
+                {% for room in rooms %}
+                    <option value="{{ room[0] }}">{{ room[0] }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Mobile</label>
+            <input type="text" id="mobile">
+
+            <label>Email</label>
+            <input type="email" id="email">
+
+            <label>Nationality</label>
+            <input type="text" id="nation">
+
+            <label>ID Proof</label>
+            <select id="idproof">
+                <option>Citizenship</option>
+                <option>Driving License</option>
+                <option>Passport</option>
+            </select>
+
+            <label>ID Number</label>
+            <input type="text" id="idnumber">
+
+            <label>Address</label>
+            <input type="text" id="address">
+
+            <div class="buttons">
+                <button type="button" onclick="add()">Save</button>
+                <button type="button" onclick="update()">Update</button>
+                <button type="button" onclick="deleteData()">Delete</button>
+                <button type="button" onclick="resetForm()">Reset</button>
+            </div>
+
+        </div>
+    
+
+   
+   
+        <div class="table-box">
+            <div class="search">
+                <select id="Field">
+                    <option value="Mobile">Mobile</option>
+                    <option value="CustomerName">Name</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search">
+                <button type="button" onclick="searchCustomer()">Search</button>
+                <button type="button" onclick="LoadData()">Show All</button>
+            </div>
+
+            <table id="customerTable">
+                <thead>
+                    <tr>
+                        <th>Ref</th>
+                        <th>Name</th>
+                        <th>Father</th>
+                        <th>Mother</th>
+                        <th>Gender</th>
+                        <th>Room</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Nationality</th>
+                        <th>ID Proof</th>
+                        <th>ID Number</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>
+        </div>
+  
+
+</div>
+ 
+
+<script>
+  
+
+    function add(){
+        let data={
+          
+            name:document.getElementById("name").value.trim(),
+            father:document.getElementById("father").value.trim(),
+            mother:document.getElementById("mother").value.trim(),
+            gender:document.getElementById("gender").value.trim(),
+            room:document.getElementById("RoomNo").value.trim(),
+            mobile:document.getElementById("mobile").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            nation:document.getElementById("nation").value.trim(),
+            idproof:document.getElementById("idproof").value.trim(),
+            idnumber:document.getElementById("idnumber").value.trim(),
+            address:document.getElementById("address").value.trim(),
+
+        };
+
+        fetch("/add_customer",{
+            method:"POST",
+            headers:{
+              "Content-Type": "application/json"
+            
+            },
+               body: JSON.stringify(data)
+        })
+            .then(Response => Response.json())
+            
+            .then(data => {
+             alert(data.message);
+                })
+    
+
+            .catch(Error =>{
+                console.error("error",Error);
+                
+            });
+        
+
+        }
+
+            function resetForm(){
+            document.querySelectorAll("input").forEach(input => input.value = "");
+            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
+            }
+
+  
+function LoadData() {
+    fetch("/get_customer")
+        .then(response => response.json())
+        .then(data => {
+
+       
+
+            const tbody = document.querySelector("#customerTable tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(customer => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${customer.referenceNo}</td>
+                    <td>${customer.customerName}</td>
+                    <td>${customer.FatherName}</td>
+                    <td>${customer.MotherName}</td>
+                    <td>${customer.Gender}</td>
+                    <td>${customer.RoomNo}</td>
+                    <td>${customer.Mobile}</td>
+                    <td>${customer.Email}</td>
+                    <td>${customer.Nationality}</td>
+                    <td>${customer.IdProof}</td>
+                    <td>${customer.IdNumber}</td>
+                    <td>${customer.Address}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Error loading customer:", error));
+}
+
+window.onload = LoadData;
+
+
+function searchCustomer(){
+    let field= document.getElementById("field").value;
+    let searchInput=document.getElementById("searchInput").value.trim;
+
+    if (searchInput===""){
+        alert:"Enter search value";
+        return;
+    }
+
+
+    fetch(`/searchCustomer?field=${field}& searchInput=${searchInput}`)
+    .then(response => response.json())
+    .then(data =>{
+        const tbody=document.querySelector("#customerTable tbody");
+        tbody.innerHTML="";
+
+
+        data.forEach(customer=>{
+            tbody.innerHTML +=`
+            <tr>
+                  <td>${customer.referenceNo}</td>
+                    <td>${customer.customerName}</td>
+                    <td>${customer.FatherName}</td>
+                    <td>${customer.MotherName}</td>
+                    <td>${customer.Gender}</td>
+                    <td>${customer.RoomNo}</td>
+                    <td>${customer.Mobile}</td>
+                    <td>${customer.Email}</td>
+                    <td>${customer.Nationality}</td>
+                    <td>${customer.IdProof}</td>
+                    <td>${customer.IdNumber}</td>
+                    <td>${customer.Address}</td>
+
+                 </tr>
+                `
+        })
+    })
+
+     .catch(error => console.error("Search error:", error));
+    
+
+}
+
+</script>
+
+
+
+
+</body>
+</html>

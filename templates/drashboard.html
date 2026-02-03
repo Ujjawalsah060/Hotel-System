@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+ 
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            height: 100vh;
+        }
+.upperSection {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+  
+ 
+}
+
+.upperSection img {
+    height: 160px;
+    
+}
+
+/* First image */
+.upperSection img:first-child {
+    width: 16.5%;
+    border-radius: 3px;
+}
+
+/* Second image */
+.upperSection img:nth-child(2) {
+    width: 83.5%;
+    border-radius: 3px;
+}
+
+        /* Main Layout */
+        .container{
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+       
+        .leftSection{
+            
+          
+            width: 250px;
+            background-color: #6DA4A9;
+            padding: 5px;
+        }
+
+        /* main content */
+     .rightSection {
+    background-image: url("static/image/mainroom.jpeg");
+    background-position: center;
+     background-repeat: no-repeat;
+    background-size: cover;
+    flex: 1; 
+    background-color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.rightSection .heading {
+    height: 60px;
+   padding-top: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 40px;
+   background-color: #6DA4A9;
+}
+
+
+#pageFrame {
+    flex: 1;
+    width: 100%;
+    border: none;
+}
+
+.SubContent{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+    margin-bottom: 25px;
+}
+
+    .Menu{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-left:30px;
+   
+    
+}
+   .services{
+    width: 100%;
+    gap: 10px;
+
+    padding: 10px;
+    display: flex;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+    background-color: #6DA4A9;
+    
+}
+.services i {
+    font-size: 18px;
+
+   
+    
+   
+    
+
+}
+
+.services:hover{
+    background: #023d4a;
+    scale: 0.9;
+    color: aliceblue;
+}  
+
+
+
+    </style>
+</head>
+<body>
+
+
+<div class="upperSection">
+    <img src="{{ url_for('static', filename='image/new_circle.jpg') }}" alt="Logo">
+    <img src="{{ url_for('static', filename='image/swmingPool.jpg') }}" alt="Swimming Pool">
+</div>
+
+
+
+
+
+
+<div class="container">
+    <div class="leftSection">
+   
+     <p class="SubContent">Dashboard </p>
+
+        <div class="Menu">
+     <button   onclick="loadPage('/customer')" class="services">
+         <i class="fa-solid fa-user"></i> Customer</button>
+
+        <button  onclick="loadPage('/roomss')"    class="services">
+           <i class="fa-solid fa-bed"></i> Room </button>
+
+        <button  onclick="loadPage('/booking')" class="services">
+            <i class="fa-solid fa-calendar-check"></i>  Booking</button>
+
+      <button onclick="loadPage('/billing')" class="services">
+        <i class="fa-solid fa-file-invoice-dollar"></i>Billing</button>
+
+        <button  onclick="loadPage('report')"   class="services">
+           <i class="fa-solid fa-chart-line"></i> Report</button>
+
+        <button   onclick="loadPage('/staff')" class="services">
+           <i class="fa-solid fa-user "></i> Staff</button>
+           
+        <button   onclick="loadPage('/logout')" class="services">
+            <i class="fa-solid fa-right-from-bracket"></i>LogOut</button>
+        </div>
+
+    </div>
+    
+  <div class="rightSection">
+    <p class="heading">HOTEL MANAGEMENT SYSTEM</p>
+    <iframe id="pageFrame" src=""></iframe>
+</div>
+     
+</div>
+
+
+
+
+<script>
+function loadPage(page){
+    document.getElementById("pageFrame").src = page;
+}
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking system</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f2f2f2;
+}
+
+.container{
+    display:flex;
+    height:100%;
+}
+
+/* Left Form */
+.form-box{
+    width:40%;
+    background:#ddd;
+    padding:15px;
+}
+
+.form-box h2{
+    text-align:center;
+    background:black;
+    color:gold;
+    padding:8px;
+}
+
+.form-box input,
+.form-box select{
+    width:95%;
+    padding:6px;
+    margin:4px 0;
+}
+
+.buttons{
+    text-align:center;
+    margin-top:10px;
+}
+
+.buttons button{
+    padding:8px 14px;
+    margin:4px;
+    background:red;
+    color:black;
+    border:none;
+    cursor:pointer;
+    border-radius: 10%;
+    font-weight: bold;
+    
+}
+.buttons button:hover{
+    background-color:green;
+    scale: 0.9;
+}
+
+/* Right section */
+.table-box {
+    width: 60%;
+    background-color: #ffffff;  
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    overflow-x: auto;
+}
+#customerTable{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#customerTable th,
+#customerTable td {
+    border: 1px solid black;
+    padding: 6px;
+}
+
+#customerTable th {
+    background-color: #1e3b8a;
+    color: #fff;
+}
+
+#customerTable tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.search input, .search select{
+    padding:5px;
+}
+
+.search button{
+    padding:6px 12px;
+    background:red;
+    color:black;
+    font-weight: bold;
+    border:none;
+
+}
+
+.search button:hover{
+    background-color: green;
+    scale: 0.9;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;background:black;color:gold;padding:10px;">
+ ***** BOOKING DETAILS *****
+</h2>
+
+<div class="container">
+
+<div class="form-box">
+    <label>  Reference-No </label>
+    <input type="text" id="ReferenceNO">
+
+       
+    <label>Room No</label>
+    <input type="number" id="Room_no" value="101" required>
+            
+
+    <label for="checkin">Check-IN</label>
+    <input type="date" id="check_in">
+
+    
+    <label for="checkout">Check-OUT</label>
+    <input type="date" id="check_out">
+
+    <div class="buttons">
+        <button  type="button" class="btn" onclick="add()">Save</button>
+        <button  type="button"onclick="update()">Update</button>
+        <button  type="button"onclick ="del()">Delete</button>
+        <button  type="button"onclick="resetForm()">Reset</button>
+    </div>
+</div>
+
+<div class="table-box">
+    <div class="search">
+        <select>
+            <option>Reference-No</option>
+             <option>Mobile</option>
+          
+        </select>
+        <input type="text" placeholder="Search">
+        <button type="button" onclick="SearchData()">Search</button>
+        <button type="button" onclick="LoadData()">Show All</button>
+    </div>
+       <table id="customerTable">
+                <thead>
+                    <tr>
+                        <th>Booking-ID</th>
+                        <th>Reference-no</th>
+                        <th>Room-No</th>
+                        <th>Check-IN</th>
+                        <th>Check-OUT</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>
+</div>
+  
+</div>
+
+<script>
+    function add(){
+        let data={
+            ReferenceNO:document.getElementById("ReferenceNO").value.trim(),
+            Room_no:document.getElementById("Room_no").value.trim(),
+            check_in:document.getElementById("check_in").value.trim(),
+            check_out:document.getElementById("check_out").value.trim(),
+            
+        };
+
+        fetch("/add_booking",{
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body:JSON.stringify(data)
+
+        })
+        .then(Response => Response.json())
+        .then(data =>{
+            alert(data.message)
+        })
+        .catch(error => {
+        console.error("Add booking error:", error);
+
+        });
+
+        }
+         function resetForm(){
+            document.querySelectorAll("input").forEach(input => input.value = "");
+            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
+            }
+function LoadData() {
+    fetch("/get_booking")
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector("#customerTable tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(booking => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${booking.BookingID}</td>
+                    <td>${booking.ReferenceNO}</td>
+                    <td>${booking.Room_no}</td>
+                    <td>${booking.check_in}</td>
+                    <td>${booking.check_out}</td>
+                `;
+                tbody.append(row);
+            });
+        })
+        .catch(error => console.error("Error loading Booking:", error));
+}
+
+window.onload = LoadData;
+
+    
+</script>
+
+
+</body>
+</html>
