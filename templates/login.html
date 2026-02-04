@@ -164,9 +164,14 @@ document.getElementById("loginBtn").addEventListener("click", function () {
     .then(data => {
         if (data === "success") {
             window.location.href = "/drashboard";
+            
         } else {
             alert("Invalid name or password");
         }
+
+        
+        
+
     })
     .catch(err => console.error(err));
 });

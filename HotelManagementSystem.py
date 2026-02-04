@@ -36,6 +36,9 @@ def login():
         return "success"
     else:
         return "Invalid username or password"
+    
+    
+    
 
 
 
@@ -43,11 +46,12 @@ def login():
 @app.route("/forgot", methods=["GET", "POST"])
 def reset_password():
     if request.method == "POST":
-        phone = request.form["phone"]
-        newPassword = request.form["password"]
+        PhoneNumber = request.form["PhoneNumber"]
+        Email = request.form["Email"]
+        password = request.form["password"]
 
-        sql = "UPDATE users SET password=%s WHERE phone=%s"
-        cursor.execute(sql, (newPassword, phone))
+        sql = "UPDATE  register  set password=%s where Email=%s and   PhoneNumber=%s"
+        cursor.execute(sql, (password, Email, PhoneNumber))
         db.commit()
 
         if cursor.rowcount > 0:

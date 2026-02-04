@@ -100,52 +100,50 @@ body{
     </form>
 </div>
 <script>
-    document.getElementById("registerform").addEventListener("submit",function(event){
-        let responseparagraph= document.querySelector("#response")
-        event.preventDefault();
-        let fname=document.getElementById("firstname").value.trim();
-        let lname=document.getElementById("lastname").value.trim();
-        let userEmail=document.getElementById("Email").value.trim();
-        let pNumber=document.getElementById("mobileNumber").value.trim();
-        let Password= document.getElementById("newPassword").value.trim();
-        let cpassword=document.getElementById("Conformpassword").value.trim();
+ document.getElementById("registerform").addEventListener("submit", function(event){
+    event.preventDefault();
+    let fname = document.getElementById("firstname").value.trim();
+    let lname = document.getElementById("lastname").value.trim();
+    let userEmail = document.getElementById("Email").value.trim();
+    let pNumber = document.getElementById("mobileNumber").value.trim();
+    let Password = document.getElementById("newPassword").value.trim();
+    let cpassword = document.getElementById("Conformpassword").value.trim();
 
-        if(Password != cpassword){
-            alert("Password does't match!please try again");
-            return;
+    if(Password != cpassword){
+        alert("Passwords do not match!");
+        return;
+    }
 
-        }
-
-        fetch("/register", {
+    fetch("/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
         body: new URLSearchParams({
-          FirstName: fname,
-          LastName:lname,
-          email:userEmail,
-          phone:pNumber,
-          newpassword:Password,
-          conformpassword:cpassword,
+            FirstName: fname,
+            LastName: lname,
+            email: userEmail,
+            phone: pNumber,
+            newpassword: Password,
+            conformpassword: cpassword
         })
     })
-    .then(response =>response.text())
+    .then(response => response.text())
     .then(data => {
+        
         alert(data);
-        if (data === "success") {
-            alert("Registration successful!");
-            window.location.href = "/";
-        } else {
-            alert(data);   // show error from Flask
+
+    
+        if (data === "Registration successful") {
+            window.location.href = "/login";
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Server error. Try again later.");
+        alert("Server error. Make sure Flask is running!");
     });
-    
-        })
+});
+
 
         
 

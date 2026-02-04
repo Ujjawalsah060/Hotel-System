@@ -77,9 +77,10 @@ button:hover{
 <div class="container">
     <h2>Reset Password</h2>
     <form id="forgotForm">
-        <input type="text" id="phone" name="phone" placeholder="Enter Phone Number" required>
+        <input type="text" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number" required>
+        <input type="email" id="Email" name="Email" placeholder="Enter Email" required>
         <input type="password" id="password" name="password" placeholder="New Password" required>
-        <input type="password" id="confirm" placeholder="Confirm Password" required>
+        <input type="password" id="confirm" name="confirm" placeholder="Confirm Password" required>
         <button type="submit">Reset</button>
     </form>
     <div id="msg"></div>
@@ -90,9 +91,11 @@ button:hover{
 document.getElementById("forgotForm").addEventListener("submit", function(e){
     e.preventDefault();
 
-    let phone = document.getElementById("phone").value;
-    let password = document.getElementById("password").value;
+    let  PhoneNumber = document.getElementById("PhoneNumber").value;
+    let Email = document.getElementById("Email").value;
     let confirm = document.getElementById("confirm").value;
+    let password = document.getElementById("password").value;
+   
     let msg = document.getElementById("msg");
 
     if(password !== confirm){
@@ -104,7 +107,12 @@ document.getElementById("forgotForm").addEventListener("submit", function(e){
     fetch("/forgot", {
         method: "POST",
         headers: {"Content-Type":"application/x-www-form-urlencoded"},
-        body: `phone=${phone}&password=${password}`
+
+        body: new URLSearchParams({
+            PhoneNumber: PhoneNumber,
+            Email: Email,
+            password: password
+        })
     })
     .then(res => res.text())
     .then(data => {
@@ -115,6 +123,9 @@ document.getElementById("forgotForm").addEventListener("submit", function(e){
             msg.innerHTML = data;
             msg.className = "error";
         }
+
+
+
     })
     .catch(() => {
         msg.innerHTML = "Server error!";
