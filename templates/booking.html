@@ -2,245 +2,297 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Booking system</title>
+<title>Booking System</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nepali-date-picker@2.2.0/dist/nepaliDatePicker.min.css">
+<script src="https://cdn.jsdelivr.net/npm/nepali-date-picker@2.2.0/dist/nepaliDatePicker.min.js"></script>
 
 <style>
-body{
-    font-family:Arial;
-    background:#f2f2f2;
+/* ===== Body & Layout ===== */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
 }
 
-.container{
-    display:flex;
-    height:100%;
+h2 {
+    text-align: center;
+    background-color: #1e3b8a;
+    color: gold;
+    padding: 15px 0;
+    margin: 0 0 20px 0;
 }
 
-/* Left Form */
-.form-box{
-    width:40%;
-    background:#ddd;
-    padding:15px;
+/* ===== Container ===== */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0 20px 40px 20px;
 }
 
-.form-box h2{
-    text-align:center;
-    background:black;
-    color:gold;
-    padding:8px;
+/* ===== Form Box ===== */
+.form-box {
+    flex: 1 1 350px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-box label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #333;
 }
 
 .form-box input,
-.form-box select{
-    width:95%;
-    padding:6px;
-    margin:4px 0;
+.form-box select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border 0.2s, box-shadow 0.2s;
 }
 
-.buttons{
-    text-align:center;
-    margin-top:10px;
+.form-box input:focus,
+.form-box select:focus {
+    border-color: #1e3b8a;
+    box-shadow: 0 0 5px rgba(30,59,138,0.3);
+    outline: none;
 }
 
-.buttons button{
-    padding:8px 14px;
-    margin:4px;
-    background:red;
-    color:black;
-    border:none;
-    cursor:pointer;
-    border-radius: 10%;
+/* ===== Form Buttons ===== */
+.form-box button {
+    padding: 10px 20px;
+    margin: 5px 5px 0 0;
+    border: none;
+    border-radius: 8px;
     font-weight: bold;
-    
-}
-.buttons button:hover{
-    background-color:green;
-    scale: 0.9;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: #1e3b8a;
+    color: gold;
 }
 
-/* Right section */
+.form-box button:hover {
+    background-color: #15306e;
+    transform: scale(0.95);
+}
+
+/* ===== Table Box ===== */
 .table-box {
-    width: 60%;
-    background-color: #ffffff;  
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    flex: 2 1 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     overflow-x: auto;
 }
-#customerTable{
+
+/* ===== Table ===== */
+table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
+    margin-top: 10px;
 }
 
-#customerTable th,
-#customerTable td {
-    border: 1px solid black;
-    padding: 6px;
+table th,
+table td {
+    padding: 12px 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
 }
 
-#customerTable th {
+table th {
     background-color: #1e3b8a;
     color: #fff;
+    font-weight: 600;
 }
 
-#customerTable tr:nth-child(even){
-    background-color: #f2f2f2;
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
+table tr:hover {
+    background-color: #e3e3ff;
+}
 
-.search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding: 8px 12px;
-    background-color: #f5f5f5;
+/* ===== Table Buttons ===== */
+table button {
+    padding: 6px 12px;
+    border: none;
     border-radius: 8px;
-}
-
-.search input, .search select{
-    padding:5px;
-}
-
-.search button{
-    padding:6px 12px;
-    background:red;
-    color:black;
     font-weight: bold;
-    border:none;
-
+    cursor: pointer;
+    background-color: #ff4d4d;
+    color: #fff;
+    transition: all 0.2s;
 }
 
-.search button:hover{
-    background-color: green;
-    scale: 0.9;
+table button:hover {
+    background-color: #28a745;
+    transform: scale(0.95);
 }
 
-
+/* ===== Responsive ===== */
+@media screen and (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
+    .form-box, .table-box {
+        flex: 1 1 100%;
+    }
+}
 </style>
 </head>
-
 <body>
 
-<h2 style="text-align:center;background:black;color:gold;padding:10px;">
- ***** BOOKING DETAILS *****
-</h2>
+<h2 style="text-align:center;background:black;color:gold;padding:10px;">BOOKING DETAILS</h2>
 
 <div class="container">
 
+<!-- FORM -->
 <div class="form-box">
-    <label>  Reference-No </label>
-    <input type="text" id="ReferenceNO">
+<input type="hidden" id="BookingID">
 
-       
-    <label>Room No</label>
-    <input type="number" id="Room_no" value="101" required>
-            
+<label>Customer_ID</label>
+<select id="Customer_ID">
+<option value="">--Select Customer--</option>
+{% for customer in customer_info %}
+<option value="{{ customer[0] }}">{{ customer[0] }}</option>
+{% endfor %}
+</select>
 
-    <label for="checkin">Check-IN</label>
-    <input type="date" id="check_in">
+<label>Room No</label>
+<input type="number" id="Room_no" value="101">
 
-    
-    <label for="checkout">Check-OUT</label>
-    <input type="date" id="check_out">
+<label>Check-IN</label>
+<input type="text" id="check_in">
 
-    <div class="buttons">
-        <button  type="button" class="btn" onclick="add()">Save</button>
-        <button  type="button"onclick="update()">Update</button>
-        <button  type="button"onclick ="del()">Delete</button>
-        <button  type="button"onclick="resetForm()">Reset</button>
-    </div>
+<div>
+<button onclick="add()">Save</button>
+<button onclick="update()">Update</button>
+</div>
 </div>
 
+<!-- TABLE -->
 <div class="table-box">
-    <div class="search">
-        <select>
-            <option>Reference-No</option>
-             <option>Mobile</option>
-          
-        </select>
-        <input type="text" placeholder="Search">
-        <button type="button" onclick="SearchData()">Search</button>
-        <button type="button" onclick="LoadData()">Show All</button>
-    </div>
-       <table id="customerTable">
-                <thead>
-                    <tr>
-                        <th>Booking-ID</th>
-                        <th>Reference-no</th>
-                        <th>Room-No</th>
-                        <th>Check-IN</th>
-                        <th>Check-OUT</th>
-                    
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                </tbody>
-            </table>
+<button onclick="LoadData()">Show All</button>
+<table id="customerTable">
+<thead>
+<tr>
+<th>ID</th><th>Customer</th><th>Room</th><th>Checkin</th><th>Edit</th><th>Delete</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
-  
+
 </div>
 
 <script>
-    function add(){
-        let data={
-            ReferenceNO:document.getElementById("ReferenceNO").value.trim(),
-            Room_no:document.getElementById("Room_no").value.trim(),
-            check_in:document.getElementById("check_in").value.trim(),
-            check_out:document.getElementById("check_out").value.trim(),
-            
-        };
+document.addEventListener("DOMContentLoaded", function(){
 
-        fetch("/add_booking",{
-            method:"POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body:JSON.stringify(data)
-
-        })
-        .then(Response => Response.json())
-        .then(data =>{
-            alert(data.message)
-        })
-        .catch(error => {
-        console.error("Add booking error:", error);
-
+    // Nepali Date Picker
+    if(document.getElementById("check_in").nepaliDatePicker){
+        document.getElementById("check_in").nepaliDatePicker({
+            ndpYear:true, ndpMonth:true, dateFormat:"YYYY-MM-DD"
         });
+    }
 
-        }
-         function resetForm(){
-            document.querySelectorAll("input").forEach(input => input.value = "");
-            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
-            }
-function LoadData() {
-    fetch("/get_booking")
-        .then(response => response.json())
+    LoadData();
+
+    // Auto-fill Room No when Customer selected
+    document.getElementById("Customer_ID").addEventListener("change", function(){
+        let cid = this.value;
+        if(!cid) return;
+        fetch("/get_customer_room/" + cid)
+        .then(res => res.json())
         .then(data => {
-            const tbody = document.querySelector("#customerTable tbody");
-            tbody.innerHTML = "";
+            document.getElementById("Room_no").value = data.Room_no || "";
+            if(data.error) console.error("Customer fetch error:", data.error);
+        }).catch(err => console.error("Customer fetch error:", err));
+    });
+});
 
-            data.forEach(booking => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${booking.BookingID}</td>
-                    <td>${booking.ReferenceNO}</td>
-                    <td>${booking.Room_no}</td>
-                    <td>${booking.check_in}</td>
-                    <td>${booking.check_out}</td>
-                `;
-                tbody.append(row);
-            });
-        })
-        .catch(error => console.error("Error loading Booking:", error));
+// Get form data
+function getForm(){
+    return {
+        Customer_ID: document.getElementById("Customer_ID").value,
+        Room_no: document.getElementById("Room_no").value,
+        check_in: document.getElementById("check_in").value
+    };
 }
 
-window.onload = LoadData;
+// Add booking
+function add(){
+    fetch("/add_booking",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(getForm())
+    }).then(r=>r.json())
+    .then(d=>{ alert(d.message); LoadData(); })
+    .catch(err=>console.error(err));
+}
 
-    
+// Load bookings
+function LoadData(){
+    fetch("/get_booking")
+    .then(r=>r.json())
+    .then(data=>{
+        let tbody=document.querySelector("#customerTable tbody");
+        tbody.innerHTML="";
+        data.forEach(b=>{
+            tbody.innerHTML+=`
+            <tr>
+            <td>${b.BookingID}</td>
+            <td>${b.Customer_ID}</td>
+            <td>${b.Room_no}</td>
+            <td>${b.check_in}</td>
+            <td><button onclick='edit(${JSON.stringify(b)})'>Edit</button></td>
+            <td><button onclick='deleteData(${b.BookingID})'>Delete</button></td>
+            </tr>`;
+        });
+    });
+}
+
+// Edit booking
+function edit(b){
+    document.getElementById("BookingID").value=b.BookingID;
+    document.getElementById("Customer_ID").value=b.Customer_ID;
+    document.getElementById("Room_no").value=b.Room_no;
+    document.getElementById("check_in").value=b.check_in;
+}
+
+// Update booking
+function update(){
+    let id = document.getElementById("BookingID").value;
+    if(!id){ alert("Select record first"); return; }
+    let data = getForm();
+    data.BookingID = id;
+    fetch("/update_booking",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    }).then(r=>r.json())
+    .then(d=>{ alert(d.message); LoadData(); })
+    .catch(err=>console.error(err));
+}
+
+// Delete booking
+function deleteData(id){
+    if(!confirm("Delete booking?")) return;
+    fetch("/delete_booking/"+id)
+    .then(r=>r.json())
+    .then(d=>{ alert(d.message); LoadData(); })
+    .catch(err=>console.error(err));
+}
 </script>
-
-
 </body>
 </html>

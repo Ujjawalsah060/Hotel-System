@@ -1,30 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>report system</title>
-
-
-
-
-    <style>
-body{
-    font-family: Arial;
-    background:#f2f2f2;
+<meta charset="UTF-8">
+<title>Hotel Room Report</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0;
 }
-h2{
-    text-align:center;
-    background:black;
-    color:gold;
-    padding:10px;
+h2 {
+    text-align: center;
+    background: #1e3b8a;
+    color: gold;
+    padding: 15px 0;
+    margin: 0 0 20px 0;
+}
+.container {
+    width: 95%;
+    margin: auto;
+}
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.stat-box {
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 30%;
+}
+.stat-box h3 {
+    margin: 5px 0;
+}
+.table-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #1e3b8a;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 </style>
 </head>
-
 <body>
 
-    <h2>Report details</h2>
-    
+<h2>Hotel Room Report</h2>
+<div class="container">
+
+    <div class="stats">
+        <div class="stat-box">
+            <h3>Total Rooms</h3>
+            <p>{{ total_rooms }}</p>
+        </div>
+        <div class="stat-box">
+            <h3>Booked Rooms</h3>
+            <p>{{ booked_rooms }}</p>
+        </div>
+        <div class="stat-box">
+            <h3>Available Rooms</h3>
+            <p>{{ available_rooms }}</p>
+        </div>
+    </div>
+
+    <div class="table-box">
+        <h3>Room Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Room No</th>
+                    <th>Room Type</th>
+                    <th>Price per Night</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms_details %}
+                <tr>
+                    <td>{{ room[0] }}</td>
+                    <td>{{ room[1] }}</td>
+                    <td>{{ room[2] }}</td>
+                    <td>{{ room[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
 </body>
 </html>

@@ -92,6 +92,7 @@ h2{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     overflow-x: auto;
+    
 }
 
 
@@ -134,16 +135,20 @@ h2{
 #customerTable td {
     border: 1px solid black;
     padding: 6px;
+  
 }
 
 #customerTable th {
     background-color: #1e3b8a;
     color: #fff;
+
 }
+
 
 #customerTable tr:nth-child(even){
     background-color: #f2f2f2;
 }
+
 
 
 </style>
@@ -157,7 +162,15 @@ h2{
 
 
         <div class="form-box">
-            
+
+            <input type="hidden" id="referenceNo">
+
+
+           
+
+            <label>Customer Id</label>
+            <input type="number" id="customerId">
+
             <label>Customer Name</label>
             <input type="text" id="name">
 
@@ -206,15 +219,13 @@ h2{
 
             <div class="buttons">
                 <button type="button" onclick="add()">Save</button>
-                <button type="button" onclick="update()">Update</button>
-                <button type="button" onclick="deleteData()">Delete</button>
-                <button type="button" onclick="resetForm()">Reset</button>
+                <button type="button" onclick="Update ()" >Update & Save </button>
+
             </div>
 
         </div>
     
 
-   
    
         <div class="table-box">
             <div class="search">
@@ -230,7 +241,7 @@ h2{
             <table id="customerTable">
                 <thead>
                     <tr>
-                        <th>Ref</th>
+                        <th>Customer-ID</th>
                         <th>Name</th>
                         <th>Father</th>
                         <th>Mother</th>
@@ -242,6 +253,8 @@ h2{
                         <th>ID Proof</th>
                         <th>ID Number</th>
                         <th>Address</th>
+                        <th>update_customer</th>
+                        <th>delete_customer</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -259,7 +272,7 @@ h2{
 
     function add(){
         let data={
-          
+            customerId: document.getElementById("customerId").value.trim(),
             name:document.getElementById("name").value.trim(),
             father:document.getElementById("father").value.trim(),
             mother:document.getElementById("mother").value.trim(),
@@ -297,18 +310,11 @@ h2{
 
         }
 
-            function resetForm(){
-            document.querySelectorAll("input").forEach(input => input.value = "");
-            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
-            }
-
   
 function LoadData() {
     fetch("/get_customer")
         .then(response => response.json())
         .then(data => {
-
-       
 
             const tbody = document.querySelector("#customerTable tbody");
             tbody.innerHTML = "";
@@ -316,7 +322,7 @@ function LoadData() {
             data.forEach(customer => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${customer.referenceNo}</td>
+                    <td>${customer.customerId}</td>
                     <td>${customer.customerName}</td>
                     <td>${customer.FatherName}</td>
                     <td>${customer.MotherName}</td>
@@ -328,6 +334,45 @@ function LoadData() {
                     <td>${customer.IdProof}</td>
                     <td>${customer.IdNumber}</td>
                     <td>${customer.Address}</td>
+  <td>
+  <button
+       onclick='fillForm(${JSON.stringify(customer)})'
+    onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+    onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+    style="
+    width:70px;
+      padding:8px 14px;
+      margin:4px;
+      background:red;
+      color:black;
+      border:none;
+      cursor:pointer;
+      border-radius:20%;
+      font-weight:bold;
+      transition:0.2s;
+    ">
+    Edit
+  </button>
+</td>
+
+    <td>
+      <button  onclick='deleteData(${customer.referenceNo})'
+        onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+        onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+        style="
+          padding:8px 14px;
+          margin:4px;
+          background:red;
+          color:black;
+          border:none;
+          cursor:pointer;
+          border-radius:10%;
+          font-weight:bold;
+          transition:0.2s;
+        ">
+        Delete
+      </button>
+    </td>
                 `;
                 tbody.appendChild(row);
             });
@@ -337,49 +382,177 @@ function LoadData() {
 
 window.onload = LoadData;
 
+// when edit button is clicked, this function will fill the form 
 
-function searchCustomer(){
-    let field= document.getElementById("field").value;
-    let searchInput=document.getElementById("searchInput").value.trim;
+function fillForm(customer){
+     document.getElementById("referenceNo").value = customer.referenceNo;
+    document.getElementById("customerId").value = customer.customerId;
+    document.getElementById("name").value = customer.customerName;
+    document.getElementById("father").value = customer.FatherName;
+    document.getElementById("mother").value = customer.MotherName;
+    document.getElementById("gender").value = customer.Gender;
+    document.getElementById("RoomNo").value = customer.RoomNo;
+    document.getElementById("mobile").value = customer.Mobile;
+    document.getElementById("email").value = customer.Email;
+    document.getElementById("nation").value = customer.Nationality;
+    document.getElementById("idproof").value = customer.IdProof;
+    document.getElementById("idnumber").value = customer.IdNumber;
+    document.getElementById("address").value = customer.Address;
+}
 
-    if (searchInput===""){
-        alert:"Enter search value";
+
+ // update  and  save the data 
+function Update(){
+    let data={
+         referenceNo: document.getElementById("referenceNo").value,
+         customerId: document.getElementById("customerId").value.trim(),
+        
+            name:document.getElementById("name").value.trim(),
+            father:document.getElementById("father").value.trim(),
+            mother:document.getElementById("mother").value.trim(),
+          gender:document.getElementById("gender").value.trim(),
+            room:document.getElementById("RoomNo").value.trim(),
+            mobile:document.getElementById("mobile").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            nation:document.getElementById("nation").value.trim(),
+            idproof:document.getElementById("idproof").value.trim(),
+            idnumber:document.getElementById("idnumber").value.trim(),
+            address:document.getElementById("address").value.trim(),
+    };
+
+    fetch("/update_customer",{
+        method:"PUT",
+        headers:{
+            "content-type":"application/json"
+        },
+        body:JSON.stringify(data)
+    })
+
+    .then(response => response.json())
+    .then(data =>{
+        alert(data.message);
+        LoadData();
+    })
+    .catch(error => console.error("update error:",error));
+}
+
+//delete function
+function deleteData(referenceNo){
+    if (!referenceNo) {
+        alert("Invalid reference number");
         return;
     }
 
-
-    fetch(`/searchCustomer?field=${field}& searchInput=${searchInput}`)
-    .then(response => response.json())
-    .then(data =>{
-        const tbody=document.querySelector("#customerTable tbody");
-        tbody.innerHTML="";
-
-
-        data.forEach(customer=>{
-            tbody.innerHTML +=`
-            <tr>
-                  <td>${customer.referenceNo}</td>
-                    <td>${customer.customerName}</td>
-                    <td>${customer.FatherName}</td>
-                    <td>${customer.MotherName}</td>
-                    <td>${customer.Gender}</td>
-                    <td>${customer.RoomNo}</td>
-                    <td>${customer.Mobile}</td>
-                    <td>${customer.Email}</td>
-                    <td>${customer.Nationality}</td>
-                    <td>${customer.IdProof}</td>
-                    <td>${customer.IdNumber}</td>
-                    <td>${customer.Address}</td>
-
-                 </tr>
-                `
+    if (confirm("ARE YOU SURE TO DELETE THIS CUSTOMER?")) {
+        fetch(`/delete_customer/${referenceNo}`, {
+            method: "DELETE"
         })
-    })
-
-     .catch(error => console.error("Search error:", error));
-    
-
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            LoadData();  
+        })
+        .catch(err => console.error("delete error:", err));
+    }
 }
+
+
+
+// search function
+
+function searchCustomer() {
+    const field = document.getElementById("Field").value; 
+    const searchInput = document.getElementById("searchInput").value.trim();
+
+    if (searchInput === "") {
+        alert("Enter a value to search");
+        return;
+    }
+
+    
+    let data = {
+        field: field,
+        value: searchInput
+    };
+
+    fetch("/searchCustomer", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(customers => {
+        const tbody = document.querySelector("#customerTable tbody");
+        tbody.innerHTML = "";
+
+        if (customers.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="14">No data found</td></tr>`;
+            return;
+        }
+
+        customers.forEach(customer => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${customer.customerId}</td>
+                <td>${customer.customerName}</td>
+                <td>${customer.FatherName}</td>
+                <td>${customer.MotherName}</td>
+                <td>${customer.Gender}</td>
+                <td>${customer.RoomNo}</td>
+                <td>${customer.Mobile}</td>
+                <td>${customer.Email}</td>
+                <td>${customer.Nationality}</td>
+                <td>${customer.IdProof}</td>
+                <td>${customer.IdNumber}</td>
+                <td>${customer.Address}</td>
+                <td>
+  <button
+       onclick='fillForm(${JSON.stringify(customer)})'
+    onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+    onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+    style="
+    width:70px;
+      padding:8px 14px;
+      margin:4px;
+      background:red;
+      color:black;
+      border:none;
+      cursor:pointer;
+      border-radius:20%;
+      font-weight:bold;
+      transition:0.2s;
+    ">
+    Edit
+  </button>
+</td>
+
+    <td>
+      <button  onclick='deleteData(${customer.referenceNo})'
+        onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+        onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+        style="
+          padding:8px 14px;
+          margin:4px;
+          background:red;
+          color:black;
+          border:none;
+          cursor:pointer;
+          border-radius:10%;
+          font-weight:bold;
+          transition:0.2s;
+        ">
+        Delete
+      </button>
+    </td>
+            `;
+            tbody.appendChild(row);
+        });
+    })
+    .catch(error => console.error("Search error:", error));
+}
+
 
 </script>
 

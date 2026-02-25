@@ -64,7 +64,12 @@ body{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 
+}
+.table-box::-webkit-scrollbar{
+    display: hidden;
 }
 
 
@@ -128,8 +133,8 @@ ADD STAFF DETAILS
 <div class="container">
 
 <div class="form-box">
-    <label> Id_Number</label>
-    <input type="text" id="Id">
+
+    <input type ="hidden" id="Id">
 
     <label> First name</label>
     <input type="text" id="FirstName">
@@ -184,28 +189,26 @@ ADD STAFF DETAILS
 
     <div class="buttons">
         <button type="button" class="btn" onclick="add()">Save</button>
-        <button onclick="update()">Update</button>
-        <button onclick="del()">Delete</button>
-        <button onclick="resetForm()">Reset</button>
+        <button  type="button" onclick="update()">Update & save</button>
+      
     </div>
 </div>
 
 <div class="table-box">
     <div class="search">
-        <select>
+        <select id="Field">
             <option>Mobile</option>
             <option>Name</option>
-            <option>ID-Number</option>
+            <option> Role</option>
             
         </select>
-        <input type="text" placeholder="Search">
-        <button> Search</button>
+        <input type="text" id="searchInput" placeholder="Search">
+        <button type="button" onclick="searchStaff()"> Search</button>
         <button type="button" onclick="LoadData()">Show All</button>
     </div>
    <table id="customerTable">
                 <thead>
                     <tr>
-                        <th>ID-number</th>
                         <th>FirstName</th>
                         <th>LastName</th>
                         <th>FatherName</th>
@@ -218,6 +221,8 @@ ADD STAFF DETAILS
                         <th>ID Proof</th>
                         <th>ID Number</th>
                         <th>Address</th>
+                        <th> Update-staff</th>
+                        <th> delete-staff</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -229,97 +234,202 @@ ADD STAFF DETAILS
 </div>
 
 </div>
-
 <script>
-    function add(){
-        let data={
-            Id:document.getElementById("Id").value.trim(),
-            FirstName:document.getElementById("FirstName").value.trim(),
-            LastName:document.getElementById("LastName").value.trim(),
-            FatherName:document.getElementById("FatherName").value.trim(),
-            MotherName:document.getElementById("MotherName").value.trim(),
-            Role:document.getElementById("Role").value.trim(),
-            Gender:document.getElementById("Gender").value.trim(),
-            Mobile:document.getElementById("Mobile").value.trim(),
-            Email:document.getElementById("Email").value.trim(),
-            Nationality:document.getElementById("Nationality").value.trim(),
-            IdProof:document.getElementById("IdProof").value.trim(),
-            IdNumber:document.getElementById("IdNumber").value.trim(),
-            Address:document.getElementById("Address").value.trim(),
+// Add Staff
+function add() {
+    let data = {
+        FirstName: document.getElementById("FirstName").value.trim(),
+        LastName: document.getElementById("LastName").value.trim(),
+        FatherName: document.getElementById("FatherName").value.trim(),
+        MotherName: document.getElementById("MotherName").value.trim(),
+        Role: document.getElementById("Role").value.trim(),
+        Gender: document.getElementById("Gender").value.trim(),
+        Mobile: document.getElementById("Mobile").value.trim(),
+        Email: document.getElementById("Email").value.trim(),
+        Nationality: document.getElementById("Nationality").value.trim(),
+        IdProof: document.getElementById("IdProof").value.trim(),
+        IdNumber: document.getElementById("IdNumber").value.trim(),
+        Address: document.getElementById("Address").value.trim(),
+    };
 
+    fetch("/add_staff", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        LoadData();
+    })
+    .catch(err => console.error("Add error:", err));
+}
 
-            
-        };
-
-              fetch("/add_staff",{
-            method:"POST",
-            headers:{
-              "Content-Type": "application/json"
-            
-            },
-               body: JSON.stringify(data)
-        })
-            .then(Response => Response.json())
-            
-            .then(data => {
-             alert(data.message);
-                })
-    
-
-            .catch(Error =>{
-                console.error("error",Error);
-                
-            });
-        
-
-        }
-
-            function resetForm(){
-            document.querySelectorAll("input").forEach(input => input.value = "");
-            document.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
-            }
-    
-
-function LoadData(){
+// Load Staff Table
+function LoadData() {
     fetch("/get_staff")
-    .then(Response=>Response.json())
-    .then(data=>{
-        const  tbody=document.querySelector("#customerTable tbody");
-        tbody.innerHTML="";
-
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.querySelector("#customerTable tbody");
+        tbody.innerHTML = "";
         data.forEach(staff => {
-            const row=document.createElement("tr");
-            row.innerHTML=`
-
-            <td>${staff.Id}</td>
-             <td>${staff.FirstName}</td>
-            <td>${staff.LastName}</td>
-             <td>${staff.FatherName}</td>
-            <td>${staff.LastName}</td>
-             <td>${staff.Role}</td>
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${staff.FirstName}</td>
+                <td>${staff.LastName}</td>
+                <td>${staff.FatherName}</td>
+                <td>${staff.MotherName}</td>
+                <td>${staff.Role}</td>
                 <td>${staff.Gender}</td>
-                 <td>${staff.Mobile}</td>
+                <td>${staff.Mobile}</td>
                 <td>${staff.Email}</td>
-                 <td>${staff.Nationality}</td>
-                  <td>${staff.IdProof}</td>
-                   <td>${staff.IdNumber}</td>
-              <td>${staff.Address}</td>
-
-            
-            
+                <td>${staff.Nationality}</td>
+                <td>${staff.IdProof}</td>
+                <td>${staff.IdNumber}</td>
+                <td>${staff.Address}</td>
+                <td><button onclick='fillForm(${JSON.stringify(staff)})'   onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+    onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+    style="
+    width:70px;
+      padding:8px 14px;
+      margin:4px;
+      background:red;
+      color:black;
+      border:none;
+      cursor:pointer;
+      border-radius:20%;
+      font-weight:bold;
+      transition:0.2s;
+    " >Edit</button></td>
+                <td><button onclick='deleteData(${staff.Id})'   onmouseover="this.style.background='green'; this.style.transform='scale(0.95)'"
+    onmouseout="this.style.background='red'; this.style.transform='scale(1)'"
+    style="
+    width:70px;
+      padding:8px 14px;
+      margin:4px;
+      background:red;
+      color:black;
+      border:none;
+      cursor:pointer;
+      border-radius:20%;
+      font-weight:bold;
+      transition:0.2s;
+    ">Delete</button></td>
             `;
             tbody.appendChild(row);
-
-        })
-
+        });
     })
-      .catch(error => console.error("Error loading staff:", error));
+    .catch(err => console.error("LoadData error:", err));
 }
+
 window.onload = LoadData;
 
+// Fill form
+function fillForm(staff) {
+    document.getElementById("Id").value = staff.Id;
+    document.getElementById("FirstName").value = staff.FirstName;
+    document.getElementById("LastName").value = staff.LastName;
+    document.getElementById("FatherName").value = staff.FatherName;
+    document.getElementById("MotherName").value = staff.MotherName;
+    document.getElementById("Role").value = staff.Role;
+    document.getElementById("Gender").value = staff.Gender;
+    document.getElementById("Mobile").value = staff.Mobile;
+    document.getElementById("Email").value = staff.Email;
+    document.getElementById("Nationality").value = staff.Nationality;
+    document.getElementById("IdProof").value = staff.IdProof;
+    document.getElementById("IdNumber").value = staff.IdNumber;
+    document.getElementById("Address").value = staff.Address;
+}
 
+// Delete
+function deleteData(Id) {
+    if(confirm("ARE YOU SURE YOU WANT TO DELETE THIS STAFF?")) {
+        fetch(`/delete_staff/${Id}`, { method: "DELETE" })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            LoadData();
+        })
+        .catch(err => console.error("Delete error:", err));
+    }
+}
 
+// Update
+function update() {
+    let data = {
+        Id: document.getElementById("Id").value,
+        FirstName: document.getElementById("FirstName").value.trim(),
+        LastName: document.getElementById("LastName").value.trim(),
+        FatherName: document.getElementById("FatherName").value.trim(),
+        MotherName: document.getElementById("MotherName").value.trim(),
+        Role: document.getElementById("Role").value.trim(),
+        Gender: document.getElementById("Gender").value.trim(),
+        Mobile: document.getElementById("Mobile").value.trim(),
+        Email: document.getElementById("Email").value.trim(),
+        Nationality: document.getElementById("Nationality").value.trim(),
+        IdProof: document.getElementById("IdProof").value.trim(),
+        IdNumber: document.getElementById("IdNumber").value.trim(),
+        Address: document.getElementById("Address").value.trim()
+    };
+
+    fetch("/update_staff", {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        LoadData();
+    })
+    .catch(err => console.error("Update error:", err));
+}
+
+// Search
+function searchStaff() {
+    const Field = document.getElementById("Field").value;
+    const value = document.getElementById("searchInput").value.trim();
+
+    if(!value) { alert("Please enter a search term"); return; }
+
+    fetch("/search_staff", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ Field, value })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.querySelector("#customerTable tbody");
+        tbody.innerHTML = "";
+        if(data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="14">No data found</td></tr>`;
+            return;
+        }
+        data.forEach(staff => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${staff.FirstName}</td>
+                <td>${staff.LastName}</td>
+                <td>${staff.FatherName}</td>
+                <td>${staff.MotherName}</td>
+                <td>${staff.Role}</td>
+                <td>${staff.Gender}</td>
+                <td>${staff.Mobile}</td>
+                <td>${staff.Email}</td>
+                <td>${staff.Nationality}</td>
+                <td>${staff.IdProof}</td>
+                <td>${staff.IdNumber}</td>
+                <td>${staff.Address}</td>
+                <td><button onclick='fillForm(${JSON.stringify(staff)})'>Edit</button></td>
+                <td><button onclick='deleteData(${staff.Id})'>Delete</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    })
+    .catch(err => console.error("Search error:", err));
+}
 </script>
+
 
 
 

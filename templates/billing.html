@@ -7,32 +7,35 @@
 body{
     font-family: Arial;
     background:#f2f2f2;
+    margin:0;
+    padding:0;
 }
-
 h2{
     text-align:center;
     background:black;
     color:gold;
     padding:10px;
+    margin:0;
 }
 .container{
     display:flex;
-    height:100%;
+    padding:15px;
+    gap:15px;
 }
 
+/* Left form box */
 .form_box{
-     width:40%;
+    width:35%;
     background:#ddd;
     padding:15px;
-
+    border-radius:8px;
 }
-.form_box input
-{
+.form_box input,
+.form_box select{
     width:95%;
     padding:6px;
-    margin:4px 0;
+    margin:4px 0 10px 0;
 }
-
 .buttons{
     text-align:center;
     margin-top:10px;
@@ -40,289 +43,238 @@ h2{
 .buttons button{
     background-color: red;
     padding: 8px 14px;
-     color:black;
+    color:black;
     border:none;
     cursor:pointer;
     border-radius: 10%;
     font-weight: bold;
-
 }
 .buttons button:hover{
     background-color: green;
 }
-.buttons1{
-    text-align: center;
-    margin-top: 10px;
+
+/* Right table box */
+.table-box{
+    width:65%;
+    background:#fff;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.1);
+    overflow-x:auto;
 }
-.buttons1 button{
-    background-color:black;
-    padding: 8px 14px;
-     color:white;
+#billingTable{
+    width:100%;
+    border-collapse:collapse;
+    text-align:center;
+}
+#billingTable th, #billingTable td{
+    border:1px solid black;
+    padding:6px;
+}
+#billingTable th{
+    background:#1e3b8a;
+    color:white;
+}
+#billingTable tr:nth-child(even){
+    background:#f2f2f2;
+}
+button.action-btn{
+    padding:4px 10px;
+    margin:2px;
     border:none;
+    border-radius:5px;
     cursor:pointer;
-    border-radius: 10%;
-    font-weight: bold;
-
+    font-weight:bold;
 }
-.buttons1 button:hover{
-    background-color:red;
-}
-
-/* Right section */
-.table-box {
-    width: 60%;
-    background-color: #ffffff;  
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    overflow-x: auto;
-}
-
-#customerTable{
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-
-#customerTable th,
-#customerTable td {
-    border: 1px solid black;
-    padding: 6px;
-}
-
-#customerTable th {
-    background-color: #1e3b8a;
-    color: #fff;
-}
-
-#customerTable tr:nth-child(even){
-    background-color: #f2f2f2;
-}
-
-
-
-.search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding: 8px 12px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-}
-.search input, .search select{
-    padding:5px;
-}
-
-.search button{
-    padding:6px 12px;
-    background:red;
-    color:black;
-    font-weight: bold;
-    border:none;
-
-}
-
-.search button:hover{
-    background-color: green;
-}
+button.edit-btn{background:orange;}
+button.delete-btn{background:red; color:white;}
+button.edit-btn:hover{background:green;}
+button.delete-btn:hover{background:black;}
 </style>
 </head>
 <body>
- <h2>***** BILLING DETAILS *****</h2>
+
+<h2>BILLING DETAILS</h2>
+
 <div class="container">
     <div class="form_box">
-       
-           
-             <div>
-                <label>Booking ID</label>
-                <input type="number" id="booking_id" required>
-            </div>
-        
-            <div>
-                <label>Total Days</label>
-                <input type="number" id="total_days" value="01" required>
-            </div>
-            <div>
-                <label>Room Price (per night)</label>
-                <input type="number"  id="room_price" value="1000" required>
-            </div>
-    
-            <div>
-                <label>Room Amount</label>
-                <input type="number" id="room_amount" required>
-            </div>
-            <div>
-                <label>Tax %</label>
-                <input type="number" id="tax_percent" value="12.00">
-            </div>
-        
+        <input type="hidden" id="bill_id">
+        <label>Customer ID</label>
+        <select id="Customer_ID">
+            <option value="">-- Select Customer --</option>
+            {% for customer in customer_info %}
+            <option value="{{ customer[0] }}">{{ customer[0] }}</option>
+            {% endfor %}
+        </select>
 
-       
-            <div>
-                <label>Tax Amount</label>
-                <input type="number"  id="tax_amount" >
-            </div>
-            <div>
-                <label>Extra Charges</label>
-                <input type="number"   id="extra_charges" value="0.00">
-            </div>
-     
+        <label>Room No</label>
+        <input type="text" id="Room_no" readonly>
 
-            <div>
-                <label>Discount</label>
-                <input type="number"  id="discount" value="0.00">
-            </div>
-            <div>
-                <label>Grand Total</label>
-                <input type="number" id="grand_total">
-            </div>
-        
+        <label>Room Price</label>
+        <input type="number" id="room_price" readonly>
 
-        <div  class="buttons">
-            <button type="submit" onclick="GenerateBill()">Generate Bill</button>
-           
-        </div> 
-        <div class="buttons1">
-              <button  type="button" onclick="add()">Save</button>
+        <label>Total Days</label>
+        <input type="number" id="total_days" value="1">
+
+        <label>Room Amount</label>
+        <input type="number" id="room_amount" readonly>
+
+        <label>Tax %</label>
+        <input type="number" id="tax_percent" value="12">
+
+        <label>Tax Amount</label>
+        <input type="number" id="tax_amount" readonly>
+
+        <label>Extra Charges</label>
+        <input type="number" id="extra_charges" value="0">
+
+        <label>Discount</label>
+        <input type="number" id="discount" value="0">
+
+        <label>Grand Total</label>
+        <input type="number" id="grand_total" readonly>
+
+        <div class="buttons">
+            <button onclick="GenerateBill()">Generate Bill</button>
+            <button onclick="addBilling()">Save Billing</button>
         </div>
-
     </div>
 
     <div class="table-box">
-    <div class="search">
-        <select>
-            <option>Reference-No</option>
-            <option>Name</option>
-        </select>
-        <input type="text" placeholder="Search">
-        <button type="button" onclick="search()"> Search</button>
-        <button type="button" onclick="LoadData()">Show All</button>
+        <table id="billingTable">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Room No</th>
+                    <th>Days</th>
+                    <th>Price</th>
+                    <th>Room Amount</th>
+                    <th>Tax%</th>
+                    <th>Tax Amt</th>
+                    <th>Extra</th>
+                    <th>Discount</th>
+                    <th>Grand Total</th>
+                    <th>Bill Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-       <table id="customerTable">
-                <thead>
-                    <tr>
-                        <th>Bill_ID</th>
-                        <th>Booking-ID</th>
-                        <th>total_days</th>
-                        <th>Room_price</th>
-                        <th>Room_amount</th>
-                        <th>Tax%</th>
-                        <th>Tax-amount</th>
-                        <th>Extra-charge</th>
-                        <th>Discount</th>
-                        <th>Grand-Total</th>
-                        <th>Bill-Date</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                </tbody>
-            </table>
-
-</div>
 </div>
 
 <script>
-    function GenerateBill(){
-        let total_days= Number(document.getElementById("total_days").value);
-        let room_price=Number(document.getElementById("room_price").value);
-        //room amount
-        let room_amount=total_days * room_price;
-        document.getElementById("room_amount").value=room_amount;
+// Auto-fill Room No & Price
+document.getElementById("Customer_ID").addEventListener("change", function(){
+    let cid = this.value;
+    let roomNoInput = document.getElementById("Room_no");
+    let roomPriceInput = document.getElementById("room_price");
 
-        //tax amount
-        let tax_percent= Number(document.getElementById("tax_percent").value);
-        let tax_amount=room_amount *(tax_percent/100);
-        document.getElementById("tax_amount").value=tax_amount;
-        let extra_charge=Number(document.getElementById("extra_charges").value);
-        let discount=Number(document.getElementById("discount").value);
-
-        //grand total calculation
-        let grand_total=room_amount +tax_amount+ extra_charge-discount;
-        document.getElementById("grand_total").value=grand_total;
-
+    if(!cid){
+        roomNoInput.value = "";
+        roomPriceInput.value = 0;
+        return;
     }
 
-    function add(){
-        let data={
-            booking_id:document.getElementById("booking_id").value.trim(),
-            total_days:document.getElementById("total_days").value.trim(),
-            room_price:document.getElementById("room_price").value.trim(),
-            room_amount:document.getElementById("room_amount").value.trim(),
-            tax_percent:document.getElementById("tax_percent").value.trim(),
-            tax_amount:document.getElementById("tax_amount").value.trim(),
-            extra_charges:document.getElementById("extra_charges").value.trim(),
-            discount:document.getElementById("discount").value.trim(),
-            grand_total:document.getElementById("grand_total").value.trim(),
-            
-        };
-         fetch("/add_billing",{
-            method:"POST",
-            headers:{
-                "content-type":"application/json"
-            },
-            body:JSON.stringify(data)
+    fetch("/get_customer_room/"+cid)
+    .then(res => res.json())
+    .then(data => {
+        roomNoInput.value = data.RoomNo || "";
+        roomPriceInput.value = (data.room_price !== undefined && data.room_price !== null) ? data.room_price : 0;
+    })
+    .catch(err => {
+        console.error(err);
+        roomNoInput.value = "";
+        roomPriceInput.value = 0;
+    });
+});
 
-         })
+// Generate bill amounts
+function GenerateBill(){
+    let days = Number(document.getElementById("total_days").value);
+    let price = Number(document.getElementById("room_price").value);
+    let room_amount = days*price;
+    document.getElementById("room_amount").value = room_amount;
 
-         .then(response=> response.json())
-         .then(data=>{
-            alert(data.message);
-         })
+    let tax_percent = Number(document.getElementById("tax_percent").value);
+    let tax_amount = room_amount*(tax_percent/100);
+    document.getElementById("tax_amount").value = tax_amount;
 
+    let extra = Number(document.getElementById("extra_charges").value);
+    let discount = Number(document.getElementById("discount").value);
+    let grand_total = room_amount+tax_amount+extra-discount;
+    document.getElementById("grand_total").value = grand_total;
+}
 
+// Add billing
+function addBilling(){
+    let data={
+        Customer_ID: document.getElementById("Customer_ID").value,
+        total_days: document.getElementById("total_days").value,
+        room_price: document.getElementById("room_price").value,
+        room_amount: document.getElementById("room_amount").value,
+        tax_percent: document.getElementById("tax_percent").value,
+        tax_amount: document.getElementById("tax_amount").value,
+        extra_charges: document.getElementById("extra_charges").value,
+        discount: document.getElementById("discount").value,
+        grand_total: document.getElementById("grand_total").value
+    };
+    fetch("/add_billing",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        loadBilling();
+    })
+    .catch(err=>console.error(err));
+}
 
-
-            .catch(Error=>{
-                console.error("error",Error);
-            });
-
-
-    }
-
-
-
-
-    function LoadData(){
-        fetch("/get_billing")
-        .then(response => response.json())
-        .then(data=>{
-            let tbody=document.querySelector("#customerTable tbody");
-            tbody.innerHTML="";
-
-            data.forEach(bill=>{
-                let row=document.createElement("tr");
-
-                row.innerHTML=`
-                <td>${bill.bill_id}</td>
-                <td>${bill.booking_id}</td>
-                <td>${bill.total_days}</td>
-                <td>${bill.room_price}</td>
-                <td>${bill.room_amount}</td>
-                <td>${bill.tax_percent}</td>
-                <td>${bill.tax_amount}</td>
-                <td>${bill.extra_charges}</td>
-                <td>${bill.discount}</td>
-                <td>${bill.grand_total}</td>
-                <td>${bill.bill_date}</td>
-                `;
-
-                tbody.appendChild(row);
-            });
-        })
-        .catch(Error=>{
-            console.error("error",Error);
+// Load all billing
+function loadBilling(){
+    fetch("/get_billing")
+    .then(res=>res.json())
+    .then(data=>{
+        let tbody=document.querySelector("#billingTable tbody");
+        tbody.innerHTML="";
+        data.forEach(b=>{
+            let tr=document.createElement("tr");
+            tr.innerHTML=`
+            <td>${b.Customer_ID}</td>
+            <td>${b.RoomNo || "-"}</td>
+            <td>${b.total_days}</td>
+            <td>${b.room_price}</td>
+            <td>${b.room_amount}</td>
+            <td>${b.tax_percent}</td>
+            <td>${b.tax_amount}</td>
+            <td>${b.extra_charges}</td>
+            <td>${b.discount}</td>
+            <td>${b.grand_total}</td>
+            <td>${b.bill_date}</td>
+            <td><button class="action-btn edit-btn" onclick="editBilling(${b.bill_id})">Edit</button></td>
+            <td><button class="action-btn delete-btn" onclick="deleteBilling(${b.bill_id})">Delete</button></td>
+            `;
+            tbody.appendChild(tr);
         });
-    }
+    });
+}
 
-   
+// Delete billing
+function deleteBilling(id){
+    if(!confirm("Delete this bill?")) return;
+    fetch("/delete_billing/"+id)z
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        loadBilling();
+    });
+}
 
-
+// Initial load
+loadBilling();
 </script>
-
-
-
 </body>
 </html>

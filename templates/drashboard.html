@@ -5,190 +5,229 @@
     <title>Hotel Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
- 
     <style>
+        /* Modern Reset & Theme Variables */
+        :root {
+            --primary-dark: #2c3e50;
+            --accent-color: #7d5fff;
+            --sidebar-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --bg-light: #f1f2f6;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
         *{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body{
             height: 100vh;
+            background-color: var(--bg-light);
+            overflow: hidden;
         }
-.upperSection {
-    width: 100%;
-    height: 160px;
-    display: flex;
-    align-items: center;
-  
- 
-}
 
-.upperSection img {
-    height: 160px;
-    
-}
+        /* Upper Section Styling */
+        .upperSection {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
 
-/* First image */
-.upperSection img:first-child {
-    width: 16.5%;
-    border-radius: 3px;
-}
+        .upperSection img:first-child {
+            height: 70px;
+            width: 70px;
+            margin-left: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            object-fit: cover;
+        }
 
-/* Second image */
-.upperSection img:nth-child(2) {
-    width: 83.5%;
-    border-radius: 3px;
-}
+        .upperSection h2 {
+            color: white;
+            margin-left: 50px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+        }
 
         /* Main Layout */
         .container{
             display: flex;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 80px);
         }
 
-       
+        /* Sidebar Styling */
         .leftSection{
-            
-          
-            width: 250px;
-            background-color: #6DA4A9;
-            padding: 5px;
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            padding: 20px 0;
+            border-right: 1px solid #dfe6e9;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* main content */
-     .rightSection {
-    background-image: url("static/image/mainroom.jpeg");
-    background-position: center;
-     background-repeat: no-repeat;
-    background-size: cover;
-    flex: 1; 
-    background-color: #f1f5f9;
-    display: flex;
-    flex-direction: column;
-}
+        .SubContent{
+            text-align: left;
+            padding: 0 30px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
 
-.rightSection .heading {
-    height: 60px;
-   padding-top: 8px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 40px;
-   background-color: #6DA4A9;
-}
+        .Menu{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 15px;
+        }
 
+        .services{
+            width: 100%;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: transparent;
+            color: var(--text-main);
+            text-align: left;
+        }
 
-#pageFrame {
-    flex: 1;
-    width: 100%;
-    border: none;
-}
+        .services i {
+            font-size: 18px;
+            color: var(--accent-color);
+            width: 25px;
+            text-align: center;
+        }
 
-.SubContent{
-    text-align: center;
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-    margin-bottom: 25px;
-}
+        .services:hover{
+            background: var(--primary-dark);
+            color: white;
+            transform: translateX(5px);
+        }
 
-    .Menu{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-left:30px;
-   
-    
-}
-   .services{
-    width: 100%;
-    gap: 10px;
+        /* Specific style for logout to make it stand out */
+        .services:last-child {
+            margin-top: 20px;
+            border-top: 1px solid #f1f2f6;
+            border-radius: 0;
+            color: #ff7675;
+        }
+        
+        .services:last-child i {
+            color: #ff7675;
+        }
 
-    padding: 10px;
-    display: flex;
-    font-weight: bold;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: 0.3s;
-    background-color: #6DA4A9;
-    
-}
-.services i {
-    font-size: 18px;
+        /* Right Content Section */
+        .rightSection {
+            flex: 1; 
+          
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-   
-    
-   
-    
+      
+        .rightSection::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("static/image/mainroom.jpeg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.099; 
+            pointer-events: none;
+        }
 
-}
+        #pageFrame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
 
-.services:hover{
-    background: #023d4a;
-    scale: 0.9;
-    color: aliceblue;
-}  
-
-
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .leftSection {
+                width: 80px;
+            }
+            .SubContent, .services span {
+                display: none;
+            }
+            .services {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            .services i {
+                margin-right: 0;
+            }
+        }
 
     </style>
 </head>
 <body>
 
-
 <div class="upperSection">
     <img src="{{ url_for('static', filename='image/new_circle.jpg') }}" alt="Logo">
-    <img src="{{ url_for('static', filename='image/swmingPool.jpg') }}" alt="Swimming Pool">
+    <h2>Hotel Management System</h2>
 </div>
-
-
-
-
-
 
 <div class="container">
     <div class="leftSection">
-   
-     <p class="SubContent">Dashboard </p>
+        <p class="SubContent">Dashboard</p>
 
         <div class="Menu">
-     <button   onclick="loadPage('/customer')" class="services">
-         <i class="fa-solid fa-user"></i> Customer</button>
+            <button onclick="loadPage('/customer')" class="services">
+                <i class="fa-solid fa-user"></i> <span>Customer</span>
+            </button>
 
-        <button  onclick="loadPage('/roomss')"    class="services">
-           <i class="fa-solid fa-bed"></i> Room </button>
 
-        <button  onclick="loadPage('/booking')" class="services">
-            <i class="fa-solid fa-calendar-check"></i>  Booking</button>
+            <button onclick="loadPage('/booking')" class="services">
+                <i class="fa-solid fa-calendar-check"></i> <span>Booking</span>
+            </button>
 
-      <button onclick="loadPage('/billing')" class="services">
-        <i class="fa-solid fa-file-invoice-dollar"></i>Billing</button>
+            <button onclick="loadPage('/billing')" class="services">
+                <i class="fa-solid fa-file-invoice-dollar"></i> <span>Billing</span>
+            </button>
 
-        <button  onclick="loadPage('report')"   class="services">
-           <i class="fa-solid fa-chart-line"></i> Report</button>
+            <button onclick="loadPage('report')" class="services">
+                <i class="fa-solid fa-chart-line"></i> <span>Room Report</span>
+            </button>
 
-        <button   onclick="loadPage('/staff')" class="services">
-           <i class="fa-solid fa-user "></i> Staff</button>
-           
-        <button   onclick="loadPage('/logout')" class="services">
-            <i class="fa-solid fa-right-from-bracket"></i>LogOut</button>
+            <button onclick="loadPage('/staff')" class="services">
+                <i class="fa-solid fa-id-card"></i> <span>Staff</span>
+            </button>
+            
+            <a href="/logout" class="services">
+    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+</a>
         </div>
-
     </div>
     
-  <div class="rightSection">
-    <p class="heading">HOTEL MANAGEMENT SYSTEM</p>
-    <iframe id="pageFrame" src=""></iframe>
+    <div class="rightSection">
+        <iframe id="pageFrame" src=""></iframe>
+    </div>
 </div>
-     
-</div>
-
-
-
 
 <script>
 function loadPage(page){
@@ -196,7 +235,5 @@ function loadPage(page){
 }
 </script>
 
-
 </body>
 </html>
-
