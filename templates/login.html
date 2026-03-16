@@ -1,192 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Hotel Management Login</title>
-    
-</head>
+<meta charset="UTF-8">
+<title>Hotel Management System</title>
+
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: "Segoe UI", sans-serif;
 }
 
-body {
-    
-    background-image: url("static/image/Deluxe-Room-Details-page.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size:cover;
-    height: 100vh;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body{
+height:100vh;
+display:flex;
 }
 
-.login-container {
-   
-    justify-content: center;
-    background-color: rgba(240, 248, 255, 0.563);
+/* LEFT IMAGE */
 
-    height: 450px;
-    width: 370px;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
-   
+.left{
+width:60%;
+background-image:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.5)),
+url("static/image/Deluxe-Room-Details-page.jpg");
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:flex-end;
+padding:60px;
+color:white;
 }
 
-.login-container h2,p {
-    margin-top: 15px;
-    color: #1e3a8a;
-    margin-bottom: 5px;
-    font-weight: bold;
-
-    
-
-}n
-
-.subtitle {
-    color: rgb(226, 19, 19);
-    margin-bottom: 20px;
-    font-size: 14px;
-    font-weight: bolder;
+.left h1{
+font-size:40px;
+margin-bottom:10px;
 }
 
-.input-group {
-    margin-bottom: 25px;
+.left p{
+font-size:18px;
+opacity:0.9;
 }
 
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    font-size: 14px;
+/* RIGHT SIDE */
+
+.right{
+width:40%;
+background:#f8fafc;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-.input-group input:focus {
-    border-color: #2563eb;
+/* LOGIN CARD */
+
+.login-container{
+width:360px;
+padding:40px;
+background:white;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+text-align:center;
 }
 
-.login-btn {
-    width: 100%;
-    padding: 10px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: bold;
+/* LOGO */
+
+.logo{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid #2563eb;
+    padding:3px;
+    margin-bottom:15px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.2);
 }
 
-.login-btn:hover {
-    background: #1e40af;
+/* TITLE */
+
+.login-container h2{
+margin-bottom:5px;
+font-size:26px;
+color:#111827;
 }
+
+.subtitle{
+margin-bottom:25px;
+color:#6b7280;
+}
+
+/* INPUT */
+
+.input-group{
+margin-bottom:20px;
+}
+
+.input-group input{
+width:100%;
+padding:12px;
+border:1px solid #d1d5db;
+border-radius:6px;
+outline:none;
+transition:0.3s;
+}
+
+.input-group input:focus{
+border-color:#2563eb;
+box-shadow:0 0 0 2px rgba(37,99,235,0.15);
+}
+
+/* BUTTON */
+
+.login-btn{
+width:100%;
+padding:12px;
+background:#111827;
+color:white;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.login-btn:hover{
+background:#374151;
+}
+
+/* LINKS */
+
 .forgot{
-    color:rgb(7, 148, 82);
-    
+margin-top:10px;
+font-size:13px;
+color:#2563eb;
+cursor:pointer;
 }
+
 #new{
-    color:black;
+margin-top:20px;
+font-size:14px;
 }
 
 #register{
-    color: red;
-    font-weight: bold;
+color:#ef4444;
+font-weight:bold;
+cursor:pointer;
 }
-#register:hover{
-color:green;
-}
-.forgot:hover{
-    color: red;
-}
-@media (max-size<678px) {
- .login-container{
-    height: 100px ;
- }
 
-    
+#register:hover{
+color:#16a34a;
 }
-    
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.left{
+display:none;
+}
+
+.right{
+width:100%;
+}
+
+}
+
 </style>
+</head>
 
 <body>
 
-<div class="login-container">
-    <h2>Hotel Management System</h2>
-    <p class="subtitle">Admin Login</p>
+<!-- LEFT IMAGE SECTION -->
 
-    <div class="input-group">
-        <input type="text" id="name" placeholder="Username">
-    </div>
+<div class="left">
 
-    <div class="input-group">
-        <input type="password" id="password" placeholder="password">
-    </div>
-    
-    <p class="forgot" id="forgot">  Forgot Password?</p>
-
-    <button class="login-btn" id="loginBtn">Login</button>
-    <p id="new"> Don't have account?<span id="register"> Register</span>  </p>
-   
-
- 
+<div>
+<h1>Find Your Perfect Stay</h1>
+<p>Manage hotel rooms, bookings and customers easily.</p>
 </div>
+
+</div>
+
+<!-- RIGHT LOGIN -->
+
+<div class="right">
+
+<div class="login-container">
+
+<!-- LOGO -->
+<img src="static/image/new_circle.jpg"  class="logo">
+
+<h2> UD Grand Hotel </h2>
+<p class="subtitle">Admin Login</p>
+
+<div class="input-group">
+<input type="text" id="name" placeholder="Username">
+</div>
+
+<div class="input-group">
+<input type="password" id="password" placeholder="Password">
+</div>
+
+<button class="login-btn" id="loginBtn">Login</button>
+
+<p class="forgot" id="forgot">Forgot Password?</p>
+
+<p id="new">Don't have account? <span id="register">Register</span></p>
+
+</div>
+
+</div>
+
 <script>
-document.getElementById("loginBtn").addEventListener("click", function () {
-    let name = document.getElementById("name").value.trim();
-    let password = document.getElementById("password").value.trim();
 
-    if (!name || !password) {
-        alert("Please fill all fields");
-        return;
-    }
+document.getElementById("loginBtn").addEventListener("click",function(){
 
-    fetch("/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({
-            name: name,   
-            password: password
-        })
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data === "success") {
-            window.location.href = "/drashboard";
-            
-        } else {
-            alert("Invalid name or password");
-        }
+let name=document.getElementById("name").value.trim();
+let password=document.getElementById("password").value.trim();
 
-        
-        
+if(!name || !password){
+alert("Please fill all fields");
+return;
+}
 
-    })
-    .catch(err => console.error(err));
+fetch("/login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+
+body:new URLSearchParams({
+name:name,
+password:password
+})
+
+})
+
+.then(response=>response.text())
+
+.then(data=>{
+
+if(data==="success"){
+window.location.href="/drashboard";
+}else{
+alert("Invalid name or password");
+}
+
+})
+
+.catch(err=>console.error(err));
+
 });
- document.getElementById("forgot").addEventListener("click",function(){
-     window.location.href = "/forgot";
 
- });
- document.getElementById("register").addEventListener("click",function(){
-     window.location.href = "/register";
+document.getElementById("forgot").addEventListener("click",function(){
+window.location.href="/forgot";
+});
 
- });
+document.getElementById("register").addEventListener("click",function(){
+window.location.href="/register";
+});
 
 </script>
-
-
 
 </body>
 </html>
