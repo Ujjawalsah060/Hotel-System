@@ -3,102 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <title>Billing System</title>
+
 <style>
+
+/* ===== Global Style ===== */
 body{
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     background:#f2f2f2;
     margin:0;
     padding:0;
 }
+
+/* ===== Header ===== */
 h2{
     text-align:center;
     background:black;
     color:gold;
-    padding:10px;
+    padding:14px;
     margin:0;
+    letter-spacing:1px;
 }
+
+/* ===== Layout ===== */
 .container{
     display:flex;
-    padding:15px;
-    gap:15px;
+    gap:20px;
+    padding:20px;
 }
 
-/* Left form box */
+/* ===== Form Section ===== */
 .form_box{
     width:35%;
-    background:#ddd;
-    padding:15px;
-    border-radius:8px;
-}
-.form_box input,
-.form_box select{
-    width:95%;
-    padding:6px;
-    margin:4px 0 10px 0;
-}
-.buttons{
-    text-align:center;
-    margin-top:10px;
-}
-.buttons button{
-    background-color: red;
-    padding: 8px 14px;
-    color:black;
-    border:none;
-    cursor:pointer;
-    border-radius: 10%;
-    font-weight: bold;
-}
-.buttons button:hover{
-    background-color: green;
-}
-
-/* Right table box */
-.table-box{
-    width:65%;
-    background:#fff;
-    padding:15px;
+    background:#ffffff;
+    padding:20px;
     border-radius:10px;
     box-shadow:0 4px 8px rgba(0,0,0,0.1);
+}
+
+.form_box label{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.form_box input,
+.form_box select{
+    width:100%;
+    padding:7px;
+    margin:5px 0 12px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+/* ===== Buttons ===== */
+.buttons{
+    text-align:center;
+}
+
+.buttons button{
+    background:#e11d48;
+    padding:8px 16px;
+    margin:5px;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:6px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.buttons button:hover{
+    background:#16a34a;
+}
+
+/* ===== Table Section ===== */
+.table-box{
+    width:65%;
+    background:#ffffff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
     overflow-x:auto;
 }
+
+/* ===== Table Style ===== */
 #billingTable{
     width:100%;
     border-collapse:collapse;
     text-align:center;
+    font-size:14px;
 }
-#billingTable th, #billingTable td{
-    border:1px solid black;
-    padding:6px;
+
+#billingTable th,
+#billingTable td{
+    border:1px solid #ddd;
+    padding:8px;
 }
+
 #billingTable th{
     background:#1e3b8a;
     color:white;
 }
+
 #billingTable tr:nth-child(even){
-    background:#f2f2f2;
+    background:#f9f9f9;
 }
+
+#billingTable tr:hover{
+    background:#e6f0ff;
+}
+
+/* ===== Action Buttons ===== */
 button.action-btn{
-    padding:4px 10px;
-    margin:2px;
+    padding:5px 10px;
     border:none;
     border-radius:5px;
     cursor:pointer;
+    font-size:13px;
     font-weight:bold;
 }
-button.edit-btn{background:orange;}
-button.delete-btn{background:red; color:white;}
-button.edit-btn:hover{background:green;}
-button.delete-btn:hover{background:black;}
+
+button.edit-btn{
+    background:orange;
+    color:white;
+}
+
+button.delete-btn{
+    background:red;
+    color:white;
+}
+
+button.edit-btn:hover{
+    background:green;
+}
+
+button.delete-btn:hover{
+    background:black;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:900px){
+    .container{
+        flex-direction:column;
+    }
+
+    .form_box,
+    .table-box{
+        width:100%;
+    }
+}
+
 </style>
 </head>
+
 <body>
 
 <h2>BILLING DETAILS</h2>
 
 <div class="container">
+
+    <!-- Left Form -->
     <div class="form_box">
+
         <input type="hidden" id="bill_id">
+
         <label>Customer ID</label>
         <select id="Customer_ID">
             <option value="">-- Select Customer --</option>
@@ -138,10 +205,15 @@ button.delete-btn:hover{background:black;}
             <button onclick="GenerateBill()">Generate Bill</button>
             <button onclick="addBilling()">Save Billing</button>
         </div>
+
     </div>
 
+
+    <!-- Right Table -->
     <div class="table-box">
+
         <table id="billingTable">
+
             <thead>
                 <tr>
                     <th>Customer ID</th>
@@ -159,57 +231,68 @@ button.delete-btn:hover{background:black;}
                     <th>Delete</th>
                 </tr>
             </thead>
+
             <tbody></tbody>
+
         </table>
+
     </div>
+
 </div>
 
-<script>
-// Auto-fill Room No & Price
-document.getElementById("Customer_ID").addEventListener("change", function(){
-    let cid = this.value;
-    let roomNoInput = document.getElementById("Room_no");
-    let roomPriceInput = document.getElementById("room_price");
 
-    if(!cid){
-        roomNoInput.value = "";
-        roomPriceInput.value = 0;
+<script>
+
+/* Auto-fill Room No & Price */
+document.getElementById("Customer_ID").addEventListener("change", function(){
+
+    let cid = this.value;
+
+    if(cid === ""){
+        document.getElementById("Room_no").value = "";
+        document.getElementById("room_price").value = "";
         return;
     }
 
-    fetch("/get_customer_room/"+cid)
+    fetch("/get_customer_room_price/" + cid)
     .then(res => res.json())
     .then(data => {
-        roomNoInput.value = data.RoomNo || "";
-        roomPriceInput.value = (data.room_price !== undefined && data.room_price !== null) ? data.room_price : 0;
+
+        document.getElementById("Room_no").value = data.RoomNo;
+        document.getElementById("room_price").value = data.room_price;
+
     })
-    .catch(err => {
-        console.error(err);
-        roomNoInput.value = "";
-        roomPriceInput.value = 0;
-    });
+    .catch(err => console.error(err));
+
 });
 
-// Generate bill amounts
+/* Generate Bill */
 function GenerateBill(){
+
     let days = Number(document.getElementById("total_days").value);
     let price = Number(document.getElementById("room_price").value);
-    let room_amount = days*price;
+
+    let room_amount = days * price;
     document.getElementById("room_amount").value = room_amount;
 
     let tax_percent = Number(document.getElementById("tax_percent").value);
-    let tax_amount = room_amount*(tax_percent/100);
+    let tax_amount = room_amount * (tax_percent/100);
     document.getElementById("tax_amount").value = tax_amount;
 
     let extra = Number(document.getElementById("extra_charges").value);
     let discount = Number(document.getElementById("discount").value);
-    let grand_total = room_amount+tax_amount+extra-discount;
+
+    let grand_total = room_amount + tax_amount + extra - discount;
+
     document.getElementById("grand_total").value = grand_total;
 }
 
-// Add billing
+
+/* Add Billing */
 function addBilling(){
-    let data={
+
+    let data = {
+
         Customer_ID: document.getElementById("Customer_ID").value,
         total_days: document.getElementById("total_days").value,
         room_price: document.getElementById("room_price").value,
@@ -219,30 +302,40 @@ function addBilling(){
         extra_charges: document.getElementById("extra_charges").value,
         discount: document.getElementById("discount").value,
         grand_total: document.getElementById("grand_total").value
+
     };
+
     fetch("/add_billing",{
+
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(data)
+
     })
     .then(res=>res.json())
     .then(data=>{
         alert(data.message);
         loadBilling();
-    })
-    .catch(err=>console.error(err));
+    });
+
 }
 
-// Load all billing
+
+/* Load Billing Table */
 function loadBilling(){
+
     fetch("/get_billing")
     .then(res=>res.json())
     .then(data=>{
-        let tbody=document.querySelector("#billingTable tbody");
-        tbody.innerHTML="";
+
+        let tbody = document.querySelector("#billingTable tbody");
+        tbody.innerHTML = "";
+
         data.forEach(b=>{
-            let tr=document.createElement("tr");
-            tr.innerHTML=`
+
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
             <td>${b.Customer_ID}</td>
             <td>${b.RoomNo || "-"}</td>
             <td>${b.total_days}</td>
@@ -254,27 +347,48 @@ function loadBilling(){
             <td>${b.discount}</td>
             <td>${b.grand_total}</td>
             <td>${b.bill_date}</td>
-            <td><button class="action-btn edit-btn" onclick="editBilling(${b.bill_id})">Edit</button></td>
-            <td><button class="action-btn delete-btn" onclick="deleteBilling(${b.bill_id})">Delete</button></td>
+
+            <td>
+            <button class="action-btn edit-btn" onclick="editBilling(${b.bill_id})">
+            Edit
+            </button>
+            </td>
+
+            <td>
+            <button class="action-btn delete-btn" onclick="deleteBilling(${b.bill_id})">
+            Delete
+            </button>
+            </td>
             `;
+
             tbody.appendChild(tr);
+
         });
+
     });
+
 }
 
-// Delete billing
+
+/* Delete Billing */
 function deleteBilling(id){
+
     if(!confirm("Delete this bill?")) return;
-    fetch("/delete_billing/"+id)z
+
+    fetch("/delete_billing/"+id)
     .then(res=>res.json())
     .then(data=>{
         alert(data.message);
         loadBilling();
     });
+
 }
 
-// Initial load
+
+/* Initial Load */
 loadBilling();
+
 </script>
+
 </body>
 </html>

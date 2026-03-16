@@ -502,20 +502,30 @@ def billing():
     return render_template("billing.html", customer_info=customer_info)
 
 
-# Get customer room & price
+# Get Room No from customer_info and Room Price from Rooms table
 @app.route("/get_customer_room_price/<cid>")
 def get_customer_room_price(cid):
     try:
         cursor.execute("""
-            SELECT customer_info.RoomNo, Rooms.RoomPrice
-            FROM customer_info
-            JOIN Rooms ON customer_info.RoomNo = Rooms.Room_no
-            WHERE CustomerID = %s
+            SELECT c.Roomno, r.price_per_night
+            FROM customer_info c
+            JOIN rooms r ON c.Roomno = r.Room_no
+            WHERE c.CustomerID = %s
         """, (cid,))
+
         row = cursor.fetchone()
+
         if row:
-            return jsonify({"RoomNo": row[0], "price_per_night": row[1]})
-        return jsonify({"RoomNo": "", "price_per_night": 0})
+            return jsonify({
+                "RoomNo": row[0],
+                "room_price": row[1]
+            })
+        else:
+            return jsonify({
+                "RoomNo": "",
+                "room_price": 0
+            })
+
     except Exception as e:
         return jsonify({"error": str(e)})
 
